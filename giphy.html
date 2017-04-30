@@ -21,10 +21,10 @@
 			position: absolute;
 		}
 		#gif-images {
-			position:relative;
 			float:left;
-			width: 100px;
-			height: 100px;
+			display:block
+			width: 100%;
+			height:auto;
 		}
 	</style>
 </head>
@@ -93,8 +93,8 @@
 					for (var i2=0; i2<response.data.length; i2++)	{
 						var imageUrl = response.data[i2].images.downsized.url;
 						var rating = response.data[i2].rating;
-						$("<img src='" +imageUrl+ "' class='img-responsive'></img>").appendTo("#gif_images");
-						$("#gif_images").append("<p>Rating: "+rating+"</p>");
+						$("<img src='" +imageUrl+ "' class='.img-responsive'></img>").appendTo("#gif_images");
+						 $("#gif_images").append("<p>Rating: "+rating+"</p>");
 
 						}
 
