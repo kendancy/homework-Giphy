@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Animals!</title>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<style>
+/*		body {
+			margin:20px 0px 0px 0px;
+			width: 100%;
+		}
+		div {
+			position: relative;
+		}
+*/		.btn {
+			margin:10px;
+		}
+		#form-group {
+			position: absolute;
+		}
+		#gif-images {
+			position:relative;
+			float:left;
+			width: 100px;
+			height: 100px;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div class="btn btn-group btn-group-sm" id="gif-btns">
+<!-- 				<button type='button' class='btn btn-info btn-md animal-button' id='wabbits' width='304' height='236'>wabbits</button>			
+ -->
+ 			</div>
+		</div>
+			<form>
+			<div class="form-group row col-sm-6">
+			<label for="ex1">Add an Animal!</label>
+			<input type="text" class="form-control" id="ex1">
+			</div>
+			<button type="submit" class="btn btn-info btn-lg" id="submit-button">Submit</button>
+			</form>
+		<div class="row">
+			<div class="gifs row" id="gif_images"></div>
+		</div>
+	</div>
+
+	<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+
+			var topics = ["wabbits", "birds", "bees","frogs", "weasels", "wolverines", "cats", "elephants", "penguins"]
+			var queryURL = "http://api.giphy.com/v1/gifs/"
+			var add_button = "";
+			var button_text ;
+
+			function addButton(button_text) {
+
+				$("#gif-btns").append("<button type='button' class='btn btn-info btn-md animal-button' id='"+button_text+"' width='304' height='236'>"+button_text+"</button>");			
+
+			}
+
+			// create the existing animals from topics array
+			for (var i=0; i<topics.length; i++) {
+				addButton(topics[i]);
+			}
+
+			// clicked on an animal button, show that animal
+			// 2nd on paramter used to match element
+			$(document).on("click", ".animal-button" , function() {
+
+				event.preventDefault();
+
+				var api_key = "dc6zaTOxFJmzC";
+				var end_point_type = "search";
+				var search_term = "q="+this.id;
+				var search_limit = "limit=10"
+				queryURL = "http://api.giphy.com/v1/gifs/"+end_point_type+"?"+search_term+"&"+search_limit+"&"+"api_key="+api_key;
+
+				$.ajax({
+					url:queryURL,
+					method: 'GET'
+				}).done(function(response) {
+
+					$("#gif_images").empty();
+
+					for (var i2=0; i2<response.data.length; i2++)	{
+						var imageUrl = response.data[i2].images.downsized.url;
+						var rating = response.data[i2].rating;
+						$("<img src='" +imageUrl+ "' class='img-responsive'></img>").appendTo("#gif_images");
+						$("#gif_images").append("<p>Rating: "+rating+"</p>");
+
+						}
+
+				});
+
+			});
+
+		// adding new button here
+		$("#submit-button").on("click", function() {
+
+			event.preventDefault();
+
+			addButton($("#ex1").val().trim());
+			topics.push($("#ex1").val().trim());
+
+		});
+
+ 	});
+
+	</script>
+
+</body>
+</html>
